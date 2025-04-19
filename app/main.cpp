@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../code/BST.h"
+#include "../code/k-d tree.h"
 
 using namespace std;
 
