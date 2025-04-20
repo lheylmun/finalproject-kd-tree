@@ -69,6 +69,12 @@ private:
     //called in the KDT deconstructor
     void delete_nodes(kd_node* node);
 
+    //tree_depth searches the tree and returns the current depth of the tree
+    int find_depth(kd_node* node);
+
+    
+
+
 };
 
 #endif //KD_TREE_H__
