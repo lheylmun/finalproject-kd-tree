@@ -12,7 +12,7 @@ const int k = 11;
 
 //kd_node is the k-d tree node structure 
 struct kd_node {
-    vector<int> patientData[k]; //vector to store patient demographics and radiographic variables
+    vector<int> patientData; //vector to store patient demographics and radiographic variables
     string treatmentType; //string to store treatment type, NOT USED FOR SPLITTING
     float ihotScore; //float to store baseline iHOT-12 score, NOT USED FOR SPLITTING
 
@@ -33,6 +33,12 @@ public:
     //returns a pointer to the new node.
     kd_node* new_node(vector<int> data, string treatment, float ihot);
 
+    //node_exists searches the nodes in the current KDT. Returns a pointer to the matching node if it exists and null otherwise.
+    //may be called with insert_node function to ensure duplicate nodes are not inserted in the KDT.
+    //May also be used independently to determine if an exact match for the target exists in the KDT. Takes a target
+    //vector as an input and returns pointer to the matching node if it exists.
+    kd_node* node_exists(vector<int> target, kd_node* root);
+
     //insert_node inserts a new node into the correct position in the tree
     //node must be created with new_node before it can be inserted. insert_node only takes a pointer as an input.
     //Does not return an output, but the KDT is updated with the new node in it.
@@ -40,13 +46,7 @@ public:
 
     //delete_node employs lazy deletion. Searches for the node if it exists and updates deleted boolean to false if 
     //node is found. Takes a target vector as an input and updates the node but does not return anything. 
-    void remove_node(vector<int> target);
-
-    //node_exists searches the nodes in the current KDT. Returns true if a node matching the input node is found and false otherwise.
-    //may be called with insert_node function to ensure duplicate nodes are not inserted in the KDT.
-    //May also be used independently to determine if an exact match for the target exists in the KDT. Takes a target
-    //vector as an input and returns a boolean T/F.
-    bool node_exists(vector<int> target);
+    void remove_node(vector<int> target, kd_node* root);
 
     //NN_search finds the node in KDT that is closest to a given input. Will use recursive search method with 
     //backtracking. Takes a target vector as an input and returns a kd_node pointer to the kd_node nearest to 
@@ -61,6 +61,8 @@ public:
     //the upper and lower bounds. Returns a vector of kd_node pointers that are within the specified range.
     vector<kd_node*> range_search(vector<int> lowerBound, vector<int> upperBound);
 
+
+    //PRINT TREE
 private:
     //double pointer that always points to the root pointer of the tree
     kd_node** root;

@@ -15,14 +15,44 @@ KDT::~KDT() {
 kd_node* KDT::new_node(vector<int> data, string treatment, float ihot) {
     //create new kd_node with specified inputs
 
-    kd_node* newPatient(new kd_node); //create a pointer for the new kd_node
-    newPatient->patientData[k] = data; //update patientData based on input data
+    kd_node* newPatient = new kd_node; //create a pointer for the new kd_node
+    
+    for (int i = 0; i < k; i++) {
+        newPatient->patientData[i] = data[i];
+    }
+
     newPatient->treatmentType = treatment; //update treatmentType based on input treatment
     newPatient->ihotScore = ihot; //update ihotScoew based on input ihot
 
     newPatient->deleted = false; //initialize deleted bool to false
     newPatient->left = nullptr; //initialize left child to null
     newPatient->right = nullptr; //initalize right child to null
+}
+
+kd_node* KDT::node_exists(vector<int> target, kd_node* root) {
+    //searches for a node that matches the target input to determine if the target already
+    //exists in the tree 
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    kd_node* cursor = root; //create and initialize cursor to root 
+    
+    while (cursor != nullptr) { //while cursor is valid
+        
+        if (cursor->patientData == target) { //check if cursor node patientData matches target data
+            return cursor; //return true if match is detected
+        }
+        
+        unsigned currDimension = find_depth(cursor) % k; //find current dimension based on location in tree
+        if (target[currDimension] < cursor->patientData[currDimension]) { //if value of target at current dimension is smaller
+            cursor = cursor->left; //search left subtree
+        }
+        else {
+            cursor = cursor->right; //otherwise, search right subtree
+        }
+    }
+    return nullptr; //return false if no match is found 
 }
 
 void KDT::insert_node(kd_node* new_node) {
@@ -35,7 +65,7 @@ void KDT::insert_node(kd_node* new_node) {
         return;
     }
 
-    if (node_exists(*new_node->patientData) == true) {
+    if (node_exists(new_node->patientData, *root) != nullptr) {
         return; //if node is already in tree, return current tree
     }
 
@@ -71,8 +101,29 @@ void KDT::insert_node(kd_node* new_node) {
     }
 }
 
+void KDT::remove_node(vector<int> target, kd_node* root) {
+    if (root == nullptr) { //tree is empty
+        return; //exit function
+    }
+    if (node_exists(target, root) == nullptr) { //node does not exist in tree
+        return; //exit function
+    }
+    else { //tree is not empty and contains the node
+        kd_node* delete_node = node_exists(target, root); //store node being deleted
+        delete_node->deleted = true; //update boolean to true
+    }
+    return;
+}
+ 
+vector<kd_node*> kNN_search(vector<int> target, int numNeighbors) {
+    //bookmark
 
-//private function to find the depth of a tree 
+
+}
+
+
+//private function - find the depth of a tree 
+//called in insert_node, node_exists
 int find_depth(kd_node* node) {
     if (node == nullptr) {
         return 0; //return 0 if node is null
@@ -86,11 +137,8 @@ int find_depth(kd_node* node) {
     return max(left_depth, right_depth) + 1;
 }
 
-
-
-
-
 //private function - free memory occupied by nodes in KDT 
+//called in deconstructor
 void KDT::delete_nodes(kd_node* node) {
     if (node == nullptr) { //base case
         return; 
