@@ -37,7 +37,7 @@ public:
     //may be called with insert_node function to ensure duplicate nodes are not inserted in the KDT.
     //May also be used independently to determine if an exact match for the target exists in the KDT. Takes a target
     //vector as an input and returns pointer to the matching node if it exists.
-    kd_node* node_exists(vector<int> target, kd_node* root);
+    kd_node* node_search(vector<int> target, kd_node* root);
 
     //insert_node inserts a new node into the correct position in the tree
     //node must be created with new_node before it can be inserted. insert_node only takes a pointer as an input.
@@ -61,8 +61,9 @@ public:
     //the upper and lower bounds. Returns a vector of kd_node pointers that are within the specified range.
     vector<kd_node*> range_search(vector<int> lowerBound, vector<int> upperBound);
 
+    //print_tree performs in order traversal to print the tree
+    void print_tree(kd_node* root, int& nodeID);
 
-    //PRINT TREE
 private:
     //double pointer that always points to the root pointer of the tree
     kd_node** root;
@@ -74,9 +75,11 @@ private:
     //tree_depth searches the tree and returns the current depth of the tree
     int find_depth(kd_node* node);
 
-    
+   //exists_bool converts the output of node_exists from a kd_node to a boolean 
+    bool node_exists(vector<int> target, kd_node* root);
 
-
+    //euclidean_distance calculates the square root of the sum of squared distances between two vectors
+    double euclidean_distance(kd_node* root, vector<int> target);
 };
 
 #endif //KD_TREE_H__

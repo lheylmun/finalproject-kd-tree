@@ -40,3 +40,10 @@ Additionally each node will contain the variables below. These variables will on
 2. Baseline iHOT12 score 
 
 
+
+References: 
+- https://www.geeksforgeeks.org/kd-trees-in-cpp/
+- https://www.geeksforgeeks.org/search-and-insertion-in-k-dimensional-tree/
+- https://www.geeksforgeeks.org/introductory-guide-to-information-retrieval-using-knn-and-kdtree/
+- https://pyimagesearch.com/2024/12/23/implementing-approximate-nearest-neighbor-search-with-kd-trees/
+- https://en.wikipedia.org/wiki/Euclidean_distance
