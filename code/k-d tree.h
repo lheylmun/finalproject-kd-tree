@@ -51,7 +51,7 @@ public:
     //NN_search finds the node in KDT that is closest to a given input. Will use recursive search method with 
     //backtracking. Takes a target vector as an input and returns a kd_node pointer to the kd_node nearest to 
     //the specified input data.
-    kd_node* NN_search(vector<int> target);
+    kd_node* NN_search(kd_node* root, vector<int> target, double& minDist, kd_node*& nearestNeighbor);
 
     //kNN_search finds the k closest neightbors to a target node. Takes a target vector as an input and the desired numebr of neighbors.
     //returns a vector of kd_node pointers to the number of neighbors nearest to the target.

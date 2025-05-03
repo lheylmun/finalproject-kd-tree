@@ -1,6 +1,7 @@
 #include "k-d tree.h"
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 //Constructor for k-d tree
 KDT::KDT() {
@@ -142,9 +143,52 @@ void KDT::remove_node(vector<int> target, kd_node* root) {
     return;
 }
  
-kd_node* KDT::NN_search(vector<int> target) {
+kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_node*& nearestNeighbor) {
+    //checks if tree is empty
+    if (root == nullptr) {
+        return; //exit
+    }
 
+    int currDimension = find_depth(root) % k; //finds depth of current tree
+    double dist = euclidean_distance(root, target); //computes euclidean distance between current node and target data
+
+    //checks if current distance is less than current minimum distance
+    if (dist < minDist) {
+        minDist = dist; //updates minimum distance to current distance
+        nearestNeighbor = root; //updates nearest neighbor to current node
+    }
+
+    kd_node* next_node = nullptr; //initializes next node to null pointer
+    kd_node* opp_node = nullptr; //initializes opposite node to nullptr
+    
+     //checks if value of target data at current dimension is less than current dimension value of patientData in current node
+    if (target[currDimension] < root->patientData[currDimension]) {
+        next_node = root->left; //updated next node to left child
+        opp_node = root->right; //updates opposite node to right child
+    } 
+
+     //otherwise, value of target at current dimension is >= value at current dimension in current node
+    else {
+        next_node = root->right; //updates next node to right child
+        opp_node = root->left; //updates opposite node to left child
+    }
+
+    NN_search(next_node, target, minDist, nearestNeighbor); //recurses NN search with next node
+
+    double currentDimDist = target[currDimension] - root->patientData[currDimension]; //calculates the distance between target and node data in the current dimension
+    //checks if square of the distance between target and node values in the current dimension is less than the current minimum distance
+    if ((currentDimDist * currentDimDist) < minDist) {
+        NN_search(opp_node, target, minDist, nearestNeighbor);
+    }
+
+    return nearestNeighbor;
 }
+    
+
+
+
+
+
 
 
 
