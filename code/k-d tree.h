@@ -8,12 +8,11 @@
 
 using namespace std;
 
-const int k = 11;
+const int k = 10;
 
 //kd_node is the k-d tree node structure 
 struct kd_node {
     vector<int> patientData; //vector to store patient demographics and radiographic variables
-    string treatmentType; //string to store treatment type, NOT USED FOR SPLITTING
     float ihotScore; //float to store baseline iHOT-12 score, NOT USED FOR SPLITTING
 
     bool deleted;
@@ -31,7 +30,7 @@ public:
 
     //new_node intializes a new kd_node with the given inputs, false boolean, and two null children. 
     //returns a pointer to the new node.
-    kd_node* new_node(vector<int> data, string treatment, float ihot);
+    kd_node* new_node(vector<int> data, float ihot);
 
     //node_exists searches the nodes in the current KDT. Returns a pointer to the matching node if it exists and null otherwise.
     //may be called with insert_node function to ensure duplicate nodes are not inserted in the KDT.
@@ -61,17 +60,13 @@ public:
     //the upper and lower bounds. Returns a vector of kd_node pointers that are within the specified range.
     vector<kd_node*> range_search(vector<int> lowerBound, vector<int> upperBound);
 
-    //print_tree performs in order traversal to print the tree
-    void print_tree(kd_node* root, int& nodeID);
+    void print_tree();
 
 private:
     //double pointer that always points to the root pointer of the tree
     kd_node** root;
 
-    //delete_nodes frees the memory currently being used by the KDT by deleting existing nodes
-    //called in the KDT deconstructor
-    void delete_nodes(kd_node* node);
-
+   
     //tree_depth searches the tree and returns the current depth of the tree
     int find_depth(kd_node* node);
 
@@ -80,6 +75,14 @@ private:
 
     //euclidean_distance calculates the square root of the sum of squared distances between two vectors
     double euclidean_distance(kd_node* root, vector<int> target);
+
+    //print_tree performs in order traversal to print the tree
+    void print(kd_node* root, int& nodeID);
+
+    //delete_nodes frees the memory currently being used by the KDT by deleting existing nodes
+    //called in the KDT deconstructor
+    void delete_nodes(kd_node* node);
+
 };
 
 #endif //KD_TREE_H__

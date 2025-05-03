@@ -16,7 +16,7 @@ KDT::~KDT() {
 
 //PUBLIC FUNCTIONS
 
-kd_node* KDT::new_node(vector<int> data, string treatment, float ihot) {
+kd_node* KDT::new_node(vector<int> data, float ihot) {
    
 
     kd_node* newPatient = new kd_node; //create a pointer to new kd_node in heap
@@ -26,7 +26,6 @@ kd_node* KDT::new_node(vector<int> data, string treatment, float ihot) {
         newPatient->patientData[i] = data[i]; //updates patientData vector within node with data values
     }
 
-    newPatient->treatmentType = treatment; //updates treatmentType based on input treatment
     newPatient->ihotScore = ihot; //updates ihotScore based on input ihot
 
     newPatient->deleted = false; //initializes deleted bool to false
@@ -146,7 +145,7 @@ void KDT::remove_node(vector<int> target, kd_node* root) {
 kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_node*& nearestNeighbor) {
     //checks if tree is empty
     if (root == nullptr) {
-        return; //exit
+        return nullptr; //return null
     }
 
     int currDimension = find_depth(root) % k; //finds depth of current tree
@@ -178,47 +177,20 @@ kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_n
     double currentDimDist = target[currDimension] - root->patientData[currDimension]; //calculates the distance between target and node data in the current dimension
     //checks if square of the distance between target and node values in the current dimension is less than the current minimum distance
     if ((currentDimDist * currentDimDist) < minDist) {
-        NN_search(opp_node, target, minDist, nearestNeighbor);
+        NN_search(opp_node, target, minDist, nearestNeighbor); //recurses NN search with opposite node
     }
 
-    return nearestNeighbor;
+    return nearestNeighbor; //returns pointer to nearest neighbor
 }
     
-
-
-
-
-
-
-
-
-
-
-void KDT::print_tree(kd_node* root, int& nodeID) {
-    //checks if current tree is empty
-    if (root == nullptr) {
-        return; //exit
-    }
-
-    //otherwise, tree is not empty 
-    print_tree(root->left, nodeID); //recurses left subtree
-
-    //iterates through each data point in patientData
-    cout << "Node: " << nodeID << "Radiographic Measurements: "; //prints node label, current node index, and measurement label
-    for (int i = 0; i < k; i++) {
-        cout << root->patientData[i]; //prints value of patientData at current index
-        if (i < k - 1) cout << ", "; //if current index is < k, prints a comma following the number
-    }
-        
-    cout << endl; //prints a new line
-    nodeID++; //increments nodeID before traversling next node
-
-    print_tree(root->right, nodeID); //recurses right subtree
+void KDT::print_tree() {
+    int nodeID = 0;
+    print(*root, nodeID);
 }
 
 //PRIVATE FUNCTIONS
 
-int find_depth(kd_node* node) {
+int KDT::find_depth(kd_node* node) {
     if (node == nullptr) {
         return 0; //return 0 if node is null
     }
@@ -253,9 +225,31 @@ double KDT::euclidean_distance(kd_node* node, vector<int> target) {
     return euclidean_dist;
 }
 
-//private function - free memory occupied by nodes in KDT 
-//called in deconstructor
+void KDT::print(kd_node* root, int& nodeID) {
+    //checks if current tree is empty
+    if (root == nullptr) {
+        return; //exit
+    }
+
+    //otherwise, tree is not empty 
+    print(root->left, nodeID); //recurses left subtree
+
+    //iterates through each data point in patientData
+    cout << "Node: " << nodeID << "Radiographic Measurements: "; //prints node label, current node index, and measurement label
+    for (int i = 0; i < k; i++) {
+        cout << root->patientData[i]; //prints value of patientData at current index
+        if (i < k - 1) cout << ", "; //if current index is < k, prints a comma following the number
+    }
+        
+    cout << endl; //prints a new line
+    nodeID++; //increments nodeID before traversling next node
+
+    print(root->right, nodeID); //recurses right subtree
+}
+
+//only called by deconstructor - frees memory occupied by KD tree
 void KDT::delete_nodes(kd_node* node) {
+
     if (node == nullptr) { //base case
         return; 
     }
@@ -263,3 +257,7 @@ void KDT::delete_nodes(kd_node* node) {
     delete_nodes(node->left); 
     delete_nodes(node->right);
 }
+
+
+
+
