@@ -49,11 +49,12 @@ public:
     //containing the input data and ihot values. Then it inserts the new node into the current k-d tree.
     void insert_new_node(vector<int> data, float ihot);
 
-    //delete_node employs lazy deletion. Searches for the node if it exists and updates deleted boolean to false if 
-    //node is found. Takes a target vector as an input and updates the node but does not return anything. 
+    //delete_node searches for the specified target node, if it exists and updates, and removes it from the tree. The node being
+    //removed is then replaced by the correct successor. Successor is determined based on the node location in the tree and number of children.
+    //Takes a target vector as an input and updates the tree but does not return anything. 
     void remove_node(vector<int> target);
 
-    //size finds and returns the size of the current k-d tree
+    //size finds and returns the current size of the current k-d tree
     int size();
 
     //get_root finds and returns the root (node 0) of the current k-d tree. Needed for testing since root is a private member function
