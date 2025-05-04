@@ -24,12 +24,11 @@ kd_node* KDT::new_node(vector<int> data, float ihot) {
     newPatient->patientData = data; //updates patientData vector within node with data values
     newPatient->ihotScore = ihot; //updates ihotScore based on input ihot
 
-    newPatient->deleted = false; //initializes deleted bool to false
-    newPatient->isLeftChild = false;
+    newPatient->isLeftChild = false; //initializes isLeftChild boolean to false
 
     newPatient->left = nullptr; //initializes left child to null
     newPatient->right = nullptr; //initalizes right child to null
-    newPatient->parent = nullptr;
+    newPatient->parent = nullptr; //initializes parent pointer to null
 
     return newPatient;
 }
@@ -135,7 +134,7 @@ void KDT::insert_new_node(vector<int> data, float ihot) {
     return;
 }
 
-void KDT::remove_node(vector<int> target, kd_node* root) {
+void KDT::remove_node(vector<int> target) {
     //lazy deletion implementation
     
     //checks if current tree is empty
@@ -147,12 +146,91 @@ void KDT::remove_node(vector<int> target, kd_node* root) {
     if (!node_exists(target)) { 
         return; //exit if no match is found
     }
+    
     //otherwise, tree is not empty and contains the target node
-    else {
-        kd_node* delete_node = node_search(target); //finds targeted node
-        delete_node->deleted = true; //updates deleted boolean to true
+
+    //returns the node to be removed 
+    kd_node* target_node = node_search(target);
+
+    //checks if node is a leaf node by looking at children 
+    if (target_node->right == nullptr && target_node->left == nullptr) {
+       
+        //checks if node being removed is the root
+        if (target_node == *root) {
+            *root = nullptr; //sets root to null
+        }
+        
+        //checks if target_node is a left child
+        else if (target_node->isLeftChild) {
+            target_node->parent->left = nullptr; //updates parent of target_node's left pointer to null
+        }
+        
+        else { //target_node is a right child
+            target_node->parent->right = nullptr; //updates parent of target_node's right pointer to null
+        }
+        
+        delete target_node; //frees memory occupied by target_node
+        return; //exits function
     }
-    return;
+
+    //checks if target_node has a right child
+    else if (target_node->left == nullptr && target_node->right != nullptr) {
+        kd_node* child = target_node->right; //assigns target_node's right child to child pointer
+        
+        //checks if target_node is tree root 
+        if (target_node == *root) {
+            *root = child; //update root to target_node's right child
+        }
+
+        //checks if target_node is a left child
+        else if (target_node->isLeftChild) {
+            target_node->parent->left = child; //assigns target_node's parent left pointer to child 
+        }
+
+        else { //target_node is a right child
+            target_node->parent->right = child;
+        }
+
+        delete target_node; //frees memory occupied by target node
+        return; //exits function 
+    }
+
+    //checks if target_node has a left child
+    else if (target_node-> left != nullptr && target_node->right == nullptr) {
+        kd_node* child = target_node->left; //assigns target_node's left child to childpointer
+
+        //checks if target_node is tree root
+        if (target_node == *root) {
+            *root = child; //updates root to target_node's left child
+        }
+        
+        //checks if target_node is a left child
+        else if (target_node->isLeftChild) {
+            target_node->parent->left = child; //assigns left pointer of target_node's parent to child
+        }
+        else { //target node is a right child
+            target_node->parent->right = child; //assigns right pointer of target_node's parent to child
+        }
+        delete target_node; //frees memory occupied by target_node
+        return; //exits function
+    }
+
+    //target_node has two children
+    else {
+        kd_node* successor = target_node->right; //assigns target_node's right child as the successor;
+
+        //iterates until null ptr is reached marking the end of the tree
+        while (successor->left != nullptr) {
+            successor = successor->left; //updates successor to the leftmost child of the right subtree
+        }
+
+        target_node = successor; //updates target node to successor 
+
+        delete successor; //free memory occupied by successor
+        return; //exits function
+    }
+    
+
 }
 
 int KDT::size() {
@@ -183,7 +261,6 @@ void KDT::print_node_data(vector<int> target) {
     return; //exits function
 }
     
-
 kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_node*& nearestNeighbor) {
     //checks if tree is empty
     if (root == nullptr) {

@@ -15,10 +15,9 @@ struct kd_node {
     vector<int> patientData; //vector to store patient demographics and radiographic variables
     float ihotScore; //float to store baseline iHOT-12 score, NOT USED FOR SPLITTING
     
-    bool isLeftChild;
-    bool deleted;
+    bool isLeftChild; //boolean to track if node is a left child of the parent node
 
-    kd_node* parent;
+    kd_node* parent; //pointer to parent node
     kd_node* left; //pointer to left subtree
     kd_node* right; //pointer to right subtree
 };
@@ -38,7 +37,7 @@ public:
     //node_exists searches the nodes in the current KDT. Returns a pointer to the matching node if it exists and null otherwise.
     //may be called with insert_node function to ensure duplicate nodes are not inserted in the KDT.
     //May also be used independently to determine if an exact match for the target exists in the KDT. Takes a target
-    //vector as an input and returns pointer to the matching node if it exists.
+    //vector as an input and returns pointer to the matching node if it exists. If the node does not exist, returns false
     kd_node* node_search(vector<int> target);
 
     //insert_node inserts a new node into the correct position in the tree
@@ -52,7 +51,7 @@ public:
 
     //delete_node employs lazy deletion. Searches for the node if it exists and updates deleted boolean to false if 
     //node is found. Takes a target vector as an input and updates the node but does not return anything. 
-    void remove_node(vector<int> target, kd_node* root);
+    void remove_node(vector<int> target);
 
     //size finds and returns the size of the current k-d tree
     int size();
@@ -77,13 +76,14 @@ public:
     //returns 0 if node is not found in the tree
     void print_node_data(vector<int> target);
 
+    //print_tree visualizes the current tree structure by printing each node and data relating to its location (parent, isLeftChild) and data (iHOT score and radiographics)
+    //does not return an ouput but the tree is printed to the terminal
     void print_tree();
 
 private:
     //double pointer that always points to the root pointer of the tree
     kd_node** root;
 
-   
     //tree_depth searches the tree and returns the current depth of the tree
     int find_depth(kd_node* node);
 
