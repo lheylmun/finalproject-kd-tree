@@ -16,7 +16,7 @@ In a k-d tree, each node is a k-dimensional point. For the purposes of this proj
 
 The k-d tree will be organized by assessing each feature and dividing nodes depending on their value. The tree itself is not balanced. Nodes are added to the tree as the information is available. Nodes are split based on if they are smaller or larger than the current node's value in that dimension. Nodes contained in the left subtree will have values less than the value of the current node in the current dimension and the right subtree will have greater values. This method was chosen because nodes are be inserted one by one for this project. Additionally, the test file contains a maximum of 10 nodes. Given the small size of the dataset and dynamic nature of the data, balancing was not necessary. However, balancing based on the median would be necessary for analyzing 100+ patients. 
 
-k-d Tree Implementation Method:
+KD Tree Implementation Method:
 
 - The axes used to split each pane will cycle as you move down the tree 
 - Nodes in the left subtree will have values less than the current node 
@@ -40,12 +40,15 @@ Radiographic Measurements:
 
 Additionally each node will contain the variables below. These variables will only be stored in the node and not used for splitting. 
 1. Baseline iHOT12 score 
-2. deleted boolean for lazy deletion implementation
 3. isLeftChild boolean to aid in determining position within tree
 4. Parent pointer
 5. Left child pointer
 6. Right child pointer
 
+
+This implementation includes several functions to add and remove nodes to the tree, search for specific nodes, find tree size, find tree root, perform nearest neighbor search and print the tree. Detailed function descriptions can be foound in the 'k-d tree.h' header file. 
+
+The 'k-d tree.cpp' file contains the implementation of each function along with the constructor, deconstructor and private member functions. The performance of this program was tested using tests created in the 'test.cpp' file. The organization and testing of this project is similar to previous homework assignments. 
 
 
 References: 
