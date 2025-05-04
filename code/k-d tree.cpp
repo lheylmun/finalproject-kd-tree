@@ -6,7 +6,7 @@
 //Constructor for k-d tree
 KDT::KDT() {
     root = new kd_node*;
-    *root = nullptr;
+    *root = NULL;
 }
 
 //Deconstructor for k-d tree
@@ -19,13 +19,9 @@ KDT::~KDT() {
 kd_node* KDT::new_node(vector<int> data, float ihot) {
    
 
-    kd_node* newPatient = new kd_node; //create a pointer to new kd_node in heap
+    kd_node* newPatient(new kd_node); //creates a pointer to new kd_node in heap
     
-    //iterates through each variable stored in data input vector
-    for (int i = 0; i < k; i++) {
-        newPatient->patientData[i] = data[i]; //updates patientData vector within node with data values
-    }
-
+    newPatient->patientData = data; //updates patientData vector within node with data values
     newPatient->ihotScore = ihot; //updates ihotScore based on input ihot
 
     newPatient->deleted = false; //initializes deleted bool to false
@@ -35,7 +31,7 @@ kd_node* KDT::new_node(vector<int> data, float ihot) {
     return newPatient;
 }
 
-kd_node* KDT::node_search(vector<int> target, kd_node* root) {
+kd_node* KDT::node_search(vector<int> target) {
     //checks if current tree is empty
     if (root == nullptr) {
         return nullptr; //return null 
@@ -43,7 +39,9 @@ kd_node* KDT::node_search(vector<int> target, kd_node* root) {
 
     //otherwise, tree contains at least 1 node 
 
-    kd_node* cursor = root; //creates cursor for tree traversal initialized to the root
+    kd_node* cursor = *root; //creates cursor for tree traversal initialized to the root
+    int depth = 0; //creates variable to store current depth as loop iterates
+    int currDimension = 0; //creates variable to store current dimension as loop iterate
     
     //iterates until null pointer is reached
     while (cursor != nullptr) { 
@@ -53,7 +51,7 @@ kd_node* KDT::node_search(vector<int> target, kd_node* root) {
             return cursor; //returns matching node if found
         }
         
-        unsigned currDimension = find_depth(cursor) % k; //finds current dimension based on location in tree
+        currDimension = depth % k; //finds current dimension based on location in tree
         
         //checks if value of target node at current dimension is less than value of current node at current dimension
         if (target[currDimension] < cursor->patientData[currDimension]) { 
@@ -62,6 +60,9 @@ kd_node* KDT::node_search(vector<int> target, kd_node* root) {
         else { //otherwise, value of target node at current dimension is >= current node
             cursor = cursor->right; //traverse right subtree
         }
+
+        depth++; //increments depth before next iteration 
+        
     } //end of while loop, if met no node match was found
    
     return nullptr; //return false 
@@ -69,33 +70,31 @@ kd_node* KDT::node_search(vector<int> target, kd_node* root) {
 
 void KDT::insert_node(kd_node* new_node) {
     //checks if the node being inserted is empty
-    if (new_node == nullptr) { 
+    if (!new_node) { 
         return; //if empty, exit
     }
 
     //checks if tree is empty
-    if (root == nullptr) {
+    if (*root == NULL) {
         *root = new_node; //if root is empty, new_node becomes root
         return; //exit
     }
 
     //checks if node being added is a duplicate 
-    if (node_exists(new_node->patientData, *root)) { 
-        return; //if node is already in tree, exit
+    if (node_exists(new_node->patientData)) { 
+       return; //if node is already in tree, exit
     }
 
     //if all checks are false, proceed with adding new_node to current tree
 
     kd_node* cursor = *root; //creates cursor for traversal initialized to current tree root
-    kd_node* parent = nullptr; //creates parent node pointer intialized to null
-    unsigned currDimension = 0; //creates unsigned integer to track current dimension in tree while looping
+    kd_node* parent = NULL; //creates parent node pointer intialized to null
+    int depth = 0; //creates integer to track current depth in tree while looping
+    int currDimension = 0; //creates integer to track current dimension for split while looping through tree 
 
     //iterate until cursor reaches null node
-    while (cursor != nullptr) {
-        
-        //find current dimensions of kd tree
-        currDimension = find_depth(cursor) % k; //find current dimension of tree
-        
+    while (cursor != NULL) {
+        currDimension = depth % k; //updates current dimension based on current depth
         parent = cursor; //updates parent pointer to current cursor position
 
         //checks if value in new node indexed at current dimension is less than value at current index in cursor node
@@ -108,9 +107,11 @@ void KDT::insert_node(kd_node* new_node) {
             
             cursor = cursor->right; //traverse right subtree
         }
+
+        depth++; //increment depth before next iteration
+
     } //end of while loop, cursor will be null, parent stores last valid node traversed 
 
-    currDimension = find_depth(parent) % k; //ensures current dimension is calculated based on parent location 
 
     //checks if value at current dimension index of new node is less than value of current dimension in parent
     if (new_node->patientData[currDimension] < parent->patientData[currDimension]){
@@ -120,7 +121,14 @@ void KDT::insert_node(kd_node* new_node) {
     else { //otherwise, value at current dimension in new node is >= parent node
         parent->right = new_node; //insert on the right
     }
+    cout << "Parent: " << parent->ihotScore << endl;
+    cout << "New Node: " << new_node->ihotScore << endl;
 } 
+
+void KDT::insert_new_node(vector<int> data, float ihot) {
+    insert_node(new_node(data, ihot));
+    return;
+}
 
 void KDT::remove_node(vector<int> target, kd_node* root) {
     //lazy deletion implementation
@@ -131,17 +139,29 @@ void KDT::remove_node(vector<int> target, kd_node* root) {
     }
 
     //checks if node being removed exists
-    if (!node_exists(target, root)) { 
+    if (!node_exists(target)) { 
         return; //exit if no match is found
     }
     //otherwise, tree is not empty and contains the target node
     else {
-        kd_node* delete_node = node_search(target, root); //finds targeted node
+        kd_node* delete_node = node_search(target); //finds targeted node
         delete_node->deleted = true; //updates deleted boolean to true
     }
     return;
 }
- 
+
+int KDT::size() {
+   return find_depth(*root);
+}
+
+kd_node* KDT::get_root() {
+    //checks if tree is empty
+    if (*root == NULL) {
+        return nullptr; //returns null
+    }
+    return *root; //returns root 
+}
+
 kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_node*& nearestNeighbor) {
     //checks if tree is empty
     if (root == nullptr) {
@@ -200,15 +220,15 @@ int KDT::find_depth(kd_node* node) {
     int right_depth = find_depth(node->right);
 
     //return depth of tree 
-    return max(left_depth, right_depth) + 1;
+    return left_depth + right_depth + 1; //computes sum of left_depth and right_depth + 1 to measure total tree depth
 }
 
-bool KDT::node_exists(vector<int> target, kd_node* root) {
-   if (node_search(target, root) == nullptr) { 
-        return true;
+bool KDT::node_exists(vector<int> target) {
+   if (node_search(target) == nullptr) { 
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 

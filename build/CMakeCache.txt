@@ -209,6 +209,15 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 GTest_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/GTest
 
 //Value Computed by CMake
+KDTree_BINARY_DIR:STATIC=/home/jovyan/CSPB 2270 Data Structures/finalproject-kd-tree/build
+
+//Value Computed by CMake
+KDTree_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+KDTree_SOURCE_DIR:STATIC=/home/jovyan/CSPB 2270 Data Structures/finalproject-kd-tree
+
+//Value Computed by CMake
 finalproject-kd-tree_BINARY_DIR:STATIC=/home/jovyan/CSPB 2270 Data Structures/finalproject-kd-tree/build
 
 //Value Computed by CMake
@@ -250,7 +259,7 @@ CMAKE_CXX_COMPILER_AR-ADVANCED:INTERNAL=1
 CMAKE_CXX_COMPILER_RANLIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS
 CMAKE_CXX_FLAGS-ADVANCED:INTERNAL=1
-CMAKE_CXX_FLAGS:INTERNAL= -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall
+CMAKE_CXX_FLAGS:INTERNAL= -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall -std=c++11 -Wall
 //ADVANCED property for variable: CMAKE_CXX_FLAGS_DEBUG
 CMAKE_CXX_FLAGS_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS_MINSIZEREL

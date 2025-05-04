@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jovyan/CSPB 2270 Data Structures/finalproject-kd-tree/code/k-d tree.cpp" "CMakeFiles/run_tests.dir/code/k-d_tree.cpp.o" "gcc" "CMakeFiles/run_tests.dir/code/k-d_tree.cpp.o.d"
+  "/home/jovyan/CSPB 2270 Data Structures/finalproject-kd-tree/tests/test.cpp" "CMakeFiles/run_tests.dir/tests/test.cpp.o" "gcc" "CMakeFiles/run_tests.dir/tests/test.cpp.o.d"
   )
 
 # Targets to which this target links.

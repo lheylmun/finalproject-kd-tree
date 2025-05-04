@@ -36,17 +36,27 @@ public:
     //may be called with insert_node function to ensure duplicate nodes are not inserted in the KDT.
     //May also be used independently to determine if an exact match for the target exists in the KDT. Takes a target
     //vector as an input and returns pointer to the matching node if it exists.
-    kd_node* node_search(vector<int> target, kd_node* root);
+    kd_node* node_search(vector<int> target);
 
     //insert_node inserts a new node into the correct position in the tree
     //node must be created with new_node before it can be inserted. insert_node only takes a pointer as an input.
     //Does not return an output, but the KDT is updated with the new node in it.
     void insert_node(kd_node* new_node);
 
+    //insert_new_node combines the functions new_node and insert_node. When called, this function creates a new node 
+    //containing the input data and ihot values. Then it inserts the new node into the current k-d tree.
+    void insert_new_node(vector<int> data, float ihot);
+
     //delete_node employs lazy deletion. Searches for the node if it exists and updates deleted boolean to false if 
     //node is found. Takes a target vector as an input and updates the node but does not return anything. 
     void remove_node(vector<int> target, kd_node* root);
 
+    //size finds and returns the size of the current k-d tree
+    int size();
+
+    //get_root finds and returns the root (node 0) of the current k-d tree. Needed for testing since root is a private member function
+    kd_node* get_root();
+    
     //NN_search finds the node in KDT that is closest to a given input. Will use recursive search method with 
     //backtracking. Takes a target vector as an input and returns a kd_node pointer to the kd_node nearest to 
     //the specified input data.
@@ -71,7 +81,7 @@ private:
     int find_depth(kd_node* node);
 
    //exists_bool converts the output of node_exists from a kd_node to a boolean 
-    bool node_exists(vector<int> target, kd_node* root);
+    bool node_exists(vector<int> target);
 
     //euclidean_distance calculates the square root of the sum of squared distances between two vectors
     double euclidean_distance(kd_node* root, vector<int> target);

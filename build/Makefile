@@ -203,6 +203,30 @@ code/k-d_tree.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/k-d_tree.cpp.s
 .PHONY : code/k-d_tree.cpp.s
 
+tests/test.o: tests/test.cpp.o
+.PHONY : tests/test.o
+
+# target to build an object file
+tests/test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test.cpp.o
+.PHONY : tests/test.cpp.o
+
+tests/test.i: tests/test.cpp.i
+.PHONY : tests/test.i
+
+# target to preprocess a source file
+tests/test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test.cpp.i
+.PHONY : tests/test.cpp.i
+
+tests/test.s: tests/test.cpp.s
+.PHONY : tests/test.s
+
+# target to generate assembly for a file
+tests/test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test.cpp.s
+.PHONY : tests/test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -220,6 +244,9 @@ help:
 	@echo "... code/k-d_tree.o"
 	@echo "... code/k-d_tree.i"
 	@echo "... code/k-d_tree.s"
+	@echo "... tests/test.o"
+	@echo "... tests/test.i"
+	@echo "... tests/test.s"
 .PHONY : help
 
 
