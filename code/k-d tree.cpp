@@ -62,7 +62,7 @@ kd_node* KDT::node_search(vector<int> target) {
         }
 
         depth++; //increments depth before next iteration 
-        
+
     } //end of while loop, if met no node match was found
    
     return nullptr; //return false 
@@ -121,8 +121,6 @@ void KDT::insert_node(kd_node* new_node) {
     else { //otherwise, value at current dimension in new node is >= parent node
         parent->right = new_node; //insert on the right
     }
-    cout << "Parent: " << parent->ihotScore << endl;
-    cout << "New Node: " << new_node->ihotScore << endl;
 } 
 
 void KDT::insert_new_node(vector<int> data, float ihot) {
@@ -161,6 +159,17 @@ kd_node* KDT::get_root() {
     }
     return *root; //returns root 
 }
+
+int KDT::get_iHOT(vector<int> target) {
+    //checks if target data exists in current tree
+    if (node_exists(target)){
+         kd_node* target_node = node_search(target); //searches for node containing target data
+         return target_node->ihotScore; //returns ihot score of target node
+    }
+    //otherwise, target data is not contained in the tree
+    return 0; //return 0
+}
+
 
 kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_node*& nearestNeighbor) {
     //checks if tree is empty
@@ -205,8 +214,9 @@ kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_n
     
 void KDT::print_tree() {
     int nodeID = 0;
-    print(*root, nodeID);
+    print(*root, nodeID, 0);
 }
+
 
 //PRIVATE FUNCTIONS
 
@@ -245,26 +255,32 @@ double KDT::euclidean_distance(kd_node* node, vector<int> target) {
     return euclidean_dist;
 }
 
-void KDT::print(kd_node* root, int& nodeID) {
+void KDT::print(kd_node* root, int& nodeID, int depth) {
     //checks if current tree is empty
     if (root == nullptr) {
         return; //exit
     }
 
-    //otherwise, tree is not empty 
-    print(root->left, nodeID); //recurses left subtree
+    int currDimension = depth % k;
 
-    //iterates through each data point in patientData
-    cout << "Node: " << nodeID << "Radiographic Measurements: "; //prints node label, current node index, and measurement label
+    cout << "Node: " << nodeID
+         << " | Depth: " << depth 
+         << " | Split Dimension: " << currDimension
+         << " | Split Value: " << root->patientData[currDimension]
+         << " | iHOT-12: " << root->ihotScore
+         << " | Data: ";
     for (int i = 0; i < k; i++) {
         cout << root->patientData[i]; //prints value of patientData at current index
         if (i < k - 1) cout << ", "; //if current index is < k, prints a comma following the number
     }
-        
     cout << endl; //prints a new line
-    nodeID++; //increments nodeID before traversling next node
 
-    print(root->right, nodeID); //recurses right subtree
+    nodeID++; //increments nodeID before traversling next node
+    depth++;
+
+    //otherwise, tree is not empty 
+    print(root->left, nodeID, depth); //recurses left subtree
+    print(root->right, nodeID, depth); //recurses right subtree
 }
 
 //only called by deconstructor - frees memory occupied by KD tree

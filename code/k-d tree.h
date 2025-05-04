@@ -70,6 +70,10 @@ public:
     //the upper and lower bounds. Returns a vector of kd_node pointers that are within the specified range.
     vector<kd_node*> range_search(vector<int> lowerBound, vector<int> upperBound);
 
+    //get_ihot locates the node containing the specified target data within the current k-d tree and returns the ihot score of the node
+    //returns 0 if node is not found in the tree
+    int get_iHOT(vector<int> target);
+
     void print_tree();
 
 private:
@@ -87,7 +91,7 @@ private:
     double euclidean_distance(kd_node* root, vector<int> target);
 
     //print_tree performs in order traversal to print the tree
-    void print(kd_node* root, int& nodeID);
+    void print(kd_node* root, int& nodeID, int depth);
 
     //delete_nodes frees the memory currently being used by the KDT by deleting existing nodes
     //called in the KDT deconstructor
