@@ -167,16 +167,22 @@ kd_node* KDT::get_root() {
     return *root; //returns root 
 }
 
-int KDT::get_iHOT(vector<int> target) {
+void KDT::print_node_data(vector<int> target) {
     //checks if target data exists in current tree
     if (node_exists(target)){
          kd_node* target_node = node_search(target); //searches for node containing target data
-         return target_node->ihotScore; //returns ihot score of target node
-    }
-    //otherwise, target data is not contained in the tree
-    return 0; //return 0
-}
 
+        //prints data for current node
+        cout << "iHOT-12 Score: " << target_node->ihotScore << " Data: ";  //prints iHOT-12 score and data label
+        for (int i = 0; i < k; i++) { //iterates through each value in patientData
+             cout << target_node->patientData[i]; //prints value at patientData index
+            if (i < k - 1) {cout << ", "; } //prints comma for internal values, does not print comma after last value
+        }
+        cout << endl; //prints new line 
+    }
+    return; //exits function
+}
+    
 
 kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_node*& nearestNeighbor) {
     //checks if tree is empty
@@ -215,7 +221,7 @@ kd_node* KDT::NN_search(kd_node* root, vector<int> target, double& minDist, kd_n
     if ((currentDimDist * currentDimDist) < minDist) {
         NN_search(opp_node, target, minDist, nearestNeighbor); //recurses NN search with opposite node
     }
-
+        
     return nearestNeighbor; //returns pointer to nearest neighbor
 }
     

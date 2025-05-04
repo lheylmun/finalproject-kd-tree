@@ -75,7 +75,7 @@ public:
 
     //get_ihot locates the node containing the specified target data within the current k-d tree and returns the ihot score of the node
     //returns 0 if node is not found in the tree
-    int get_iHOT(vector<int> target);
+    void print_node_data(vector<int> target);
 
     void print_tree();
 
