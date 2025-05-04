@@ -14,8 +14,11 @@ const int k = 10;
 struct kd_node {
     vector<int> patientData; //vector to store patient demographics and radiographic variables
     float ihotScore; //float to store baseline iHOT-12 score, NOT USED FOR SPLITTING
-
+    
+    bool isLeftChild;
     bool deleted;
+
+    kd_node* parent;
     kd_node* left; //pointer to left subtree
     kd_node* right; //pointer to right subtree
 };

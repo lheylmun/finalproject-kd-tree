@@ -25,8 +25,11 @@ kd_node* KDT::new_node(vector<int> data, float ihot) {
     newPatient->ihotScore = ihot; //updates ihotScore based on input ihot
 
     newPatient->deleted = false; //initializes deleted bool to false
+    newPatient->isLeftChild = false;
+
     newPatient->left = nullptr; //initializes left child to null
     newPatient->right = nullptr; //initalizes right child to null
+    newPatient->parent = nullptr;
 
     return newPatient;
 }
@@ -117,9 +120,13 @@ void KDT::insert_node(kd_node* new_node) {
     if (new_node->patientData[currDimension] < parent->patientData[currDimension]){
         //if value of new node at current dimension is less than parent
         parent->left = new_node; //insert on the left
+        new_node->parent = parent;
+        new_node->isLeftChild = true;
     }
     else { //otherwise, value at current dimension in new node is >= parent node
         parent->right = new_node; //insert on the right
+        new_node->parent = parent;
+        new_node->isLeftChild = false;
     }
 } 
 
@@ -265,8 +272,16 @@ void KDT::print(kd_node* root, int& nodeID, int depth) {
 
     cout << "Node: " << nodeID
          << " | Depth: " << depth 
-         << " | Split Dimension: " << currDimension
-         << " | Split Value: " << root->patientData[currDimension]
+         << " | Split Dimension: " << currDimension;
+
+    if (root->parent != nullptr) {
+        cout << " | Parent " << root->parent->ihotScore;
+    }
+    else {
+        cout << " | Parent NA";
+    }
+
+    cout << " | Left Child: " << (root->isLeftChild ? "Yes" : "No ")
          << " | iHOT-12: " << root->ihotScore
          << " | Data: ";
     for (int i = 0; i < k; i++) {
